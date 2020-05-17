@@ -1,5 +1,5 @@
 GET_ARCH		 = $(target)
-
+ifdef CFG
 include config/${CFG}/config.mk
 
 ifeq ($(ARCH), x86)
@@ -32,24 +32,42 @@ OBJDUMP = ${COMPILE}objdump
 else
  	echo ${ARCH}
 endif
+
+endif #ifdef CFG
 code :=  $(wildcard  ./*.c) \
-		$(wildcard  ./main/*.c) 
+		$(wildcard  ./main/*.c)  \
 
+SUBDIRS = common/ os/ 
 
+.PHONY : $(SUBDIRS)
+# SUBDIRS := $(shell ls -l | grep ^d | awk '{print $$9}')
+
+COM_INC := -I$(shell pwd)/common/inc 
+export COM_INC
 
 INCLUDEDIR 	:=-I $(shell pwd)
 INCLUDEDIR  +=-I /usr/include
+
 
 # CPPFLAGS   	:= -nostdinc $(INCLUDEDIR)
 # CPPLIB 			:= -L/tools/gcc-3.4.5-glibc-2.3.6/arm-linux/lib/-static -lgcc_s  
 objs 				:= ${patsubst %.c, %.o,$(code)} 
 
-${CFG}.bin: $(objs)
+ALL :=	sdk.bin 
+all: ${SUBDIRS} ${ALL}
+	echo ${SUBDIRS} $< 
+
+sdk.bin:	${SUBDIRS} $(objs) 
 	echo ${ARCH} ${TARGET_x86} 
-	${LD} ${LDLDS} -o ${CFG}.elf   $^ ${LDFLASG}
+	${LD} ${LDLDS} -o ${CFG}.elf   ${objs}  ${LDFLASG}
 	${OBJCOPY} -O binary -S ${CFG}.elf $@
 	${OBJDUMP} -D -m  ${CFG}.elf > ${CFG}.dis
 	${NM} -v -l ${CFG}.elf > ${CFG}.map
+
+$(SUBDIRS):
+	echo $(SUBDIRS) 
+	$(MAKE) -C $@ all  
+
 %.o:%.c
 	${CC}  $(CPPFLAGS) $(CFLAGS)  -c -o $@ $<
 
@@ -58,6 +76,9 @@ ${CFG}.bin: $(objs)
 clean:
 	rm -f ${CFG}.bin ${CFG}.elf ${CFG}.dis *.o 
 	find . -depth -name '*.o' -type f -print -exec rm -rf {} \; 
+
+swp:
+	find . -depth -name '*.swp' -type f -print -exec rm -rf {} \; 
 
 back:
 	bash back.sh
