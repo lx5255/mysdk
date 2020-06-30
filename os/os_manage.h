@@ -1,6 +1,22 @@
 #ifndef _OS_MANAGE_ 
 #define _OS_MANAGE_ 
 
+#ifdef OS_LOG 
+
+#if  INF_LOG_EN 
+#define os_inf_log(...)     log(...)
+#else
+#define os_inf_log(...)
+#endif
+
+#if ERR_LOG_EN
+#define os_err_log(...)     log(...)
+#else
+#define os_err_log(...)
+#endif
+
+#endif
+
 typedef enum{ 
    OS_OK,
    OS_PARAME_ERR,

@@ -1,6 +1,5 @@
 #ifndef _COMM_
 #define _COMM_
-
 typedef unsigned char  bool, u8;
 typedef unsigned long  u32;
 typedef unsigned short u16 ;

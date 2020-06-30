@@ -36,7 +36,7 @@ void *my_malloc(u32 size)
             return 0;
         } 
 
-        if(memptr->user_flag==0){
+        if (memptr->user_flag == 0){
             if((last_ptr)&&(last_ptr->user_flag==0)){//上一块内存也为空
                 last_ptr->block_size += memptr->block_size + sizeof(block_head);//合并内存块
                 memptr = last_ptr;

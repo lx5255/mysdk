@@ -1,5 +1,5 @@
-
-INCLUDEDIR 	:= -I$(shell pwd)/inc \
+INCLUDEDIR 	:= -I$(shell pwd)/inc 
+INCLUDEDIR 	:= -I$(CUR_DIR)/os 
 
 INCLUDEDIR += ${COM_INC}
 				
@@ -10,7 +10,8 @@ src :=  $(wildcard  ./*.c)
 
 OBJS := ${patsubst %.c, %.o,$(src)} 
 
-LIB = ${OUTPUT_DIR}os/os.a
+LIB = ${OUTPUT_DIR}main/main.a
+
 
 all:$(LIB) 
 

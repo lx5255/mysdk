@@ -218,7 +218,7 @@ u16 write_cbuff(c_buff_struct *cbuff, void *buf, u16 len)
 //校验cbuff是否被占用
 u8 check_cbuff_mutu(c_buff_struct *cbuff)
 {
-		return cbuff->flag&MUTU_FLAG;
+    return cbuff->flag&MUTU_FLAG;
 }
 //刷新cbuff里的数据
 void flush_cbuff(c_buff_struct *cbuff)
@@ -234,11 +234,17 @@ void flush_cbuff(c_buff_struct *cbuff)
 
 inline u16 get_cbuff_data_size(c_buff_struct *cbuff)
 {
-		return cbuff->data_len; 
+    if (cbuff == NULL) {
+       return  0; 
+    }
+    return cbuff->data_len; 
 }
 
 //获取剩余大小
 inline u16 get_cbuff_remain(c_buff_struct *cbuff)
 {
-		return cbuff->buff_len - cbuff->data_len;  //获取剩余空间大小
+    if (NULL == cbuff) {
+        return 0;
+    }
+    return cbuff->buff_len - cbuff->data_len;  //获取剩余空间大小
 }
